@@ -1,0 +1,11 @@
+version: '3.9'
+
+services:
+  review-service:
+    build:
+      context: .
+      dockerfile: apps/review-service/Dockerfile
+    container_name: review-service
+    ports:
+      - '9009:9009'
+    restart: unless-stopped

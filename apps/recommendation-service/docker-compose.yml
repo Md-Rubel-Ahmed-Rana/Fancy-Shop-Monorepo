@@ -1,0 +1,11 @@
+version: '3.9'
+
+services:
+  recommendation-service:
+    build:
+      context: .
+      dockerfile: apps/recommendation-service/Dockerfile
+    container_name: recommendation-service
+    ports:
+      - '9008:9008'
+    restart: unless-stopped

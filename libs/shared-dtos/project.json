@@ -1,0 +1,9 @@
+{
+  "name": "shared-dtos",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/shared-dtos/src",
+  "projectType": "library",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project shared-dtos --web",
+  "targets": {}
+}

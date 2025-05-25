@@ -1,0 +1,11 @@
+version: '3.9'
+
+services:
+  product-service:
+    build:
+      context: .
+      dockerfile: apps/product-service/Dockerfile
+    container_name: product-service
+    ports:
+      - '9003:9003'
+    restart: unless-stopped
