@@ -9,6 +9,7 @@
     "dev:cart": "npx nx serve cart-service",
     "dev:order": "npx nx serve order-service",
     "dev:payment": "npx nx serve payment-service",
+    "dev:auth": "npx nx serve auth-service",
     "docker:build:user": "docker build -t user-service -f apps/user-service/Dockerfile .",
     "docker:start:user": "docker run -d --name user-service-container -p 9001:9001 --env-file apps/user-service/.env user-service",
     "docker:stop:user": "docker stop user-service-container && docker rm user-service-container"
@@ -17,6 +18,7 @@
   "dependencies": {
     "@nestjs/common": "^10.0.2",
     "@nestjs/core": "^10.0.2",
+    "@nestjs/microservices": "^10.4.18",
     "@nestjs/platform-express": "^10.0.2",
     "axios": "^1.6.0",
     "class-validator": "^0.14.2",
