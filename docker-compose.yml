@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  nginx-loadbalancer:
+    build:
+      context: ./docker/nginx-loadbalancer
+    ports:
+      - '80:80'
+    depends_on:
+      - gateway
+
+  gateway:
+    build:
+      context: ./gateway
+    depends_on:
+      - user-service
+      - customer-service
+
+  user-service:
+    build:
+      context: .
+      dockerfile: /apps/user-service/Dockerfile
+    expose:
+      - '9001'
+
+  customer-service:
+    build:
+      context: .
+      dockerfile: /apps/customer-service/Dockerfile
+    expose:
+      - '9002'
