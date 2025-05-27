@@ -1,22 +1,26 @@
 import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
-import { Transport, MicroserviceOptions } from '@nestjs/microservices';
+import { Transport } from '@nestjs/microservices';
 import { AppModule } from './app/app.module';
 
 async function bootstrap() {
   const port = process.env.PORT || 9001;
-  const app = await NestFactory.createMicroservice<MicroserviceOptions>(
-    AppModule,
-    {
-      transport: Transport.TCP,
-      options: {
-        port: Number(port),
-      },
-    }
-  );
+  const app = await NestFactory.create(AppModule);
 
-  await app.listen();
-  Logger.log(`🚀 User Application is running on: http://localhost:${port}`);
+  app.connectMicroservice({
+    transport: Transport.RMQ,
+    options: {
+      urls: [process.env.RMQ_URL || 'amqp://localhost:5672'],
+      queue: process.env.RMQ_QUEUE || 'user',
+      queueOptions: {
+        durable: false,
+      },
+    },
+  });
+
+  app.listen(port, () => {
+    Logger.log(`🚀 User Application is running on: http://localhost:${port}`);
+  });
 }
 
 bootstrap();
