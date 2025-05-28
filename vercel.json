@@ -1,0 +1,5 @@
+{
+  "buildCommand": "npx nx build frontend",
+  "outputDirectory": "apps/frontend/.next",
+  "framework": "nextjs"
+}
