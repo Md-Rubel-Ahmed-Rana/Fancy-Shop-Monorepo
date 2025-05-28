@@ -5,6 +5,9 @@
   "scripts": {
     "build": "nx build",
     "dev:user": "npx nx serve user-service",
+    "dev:frontend": "npx nx dev frontend",
+    "build:frontend": "npx nx build frontend",
+    "start:frontend": "npx nx start frontend --configuration=production",
     "dev:customer": "npx nx serve customer-service",
     "dev:product": "npx nx serve product-service",
     "dev:cart": "npx nx serve cart-service",
