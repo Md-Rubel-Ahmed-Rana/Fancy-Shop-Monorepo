@@ -1,0 +1,10 @@
+{
+    "compilerOptions": {
+      "baseUrl": ".",
+      "paths": {
+        "@fancy-shop/ui-components": ["libs/ui-components/src/index.ts"],
+        "@fancy-shop/ui-components/*": ["libs/ui-components/src/*"]
+      }
+    }
+  }
+  
