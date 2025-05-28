@@ -1,0 +1,53 @@
+name: Auto Merge Production Branches to Main
+
+on:
+  push:
+    branches:
+      - frontend-prod
+      - auth-service-prod
+      - user-service-prod
+      - customer-service-prod
+      - cart-service-prod
+      - inventory-service-prod
+      - order-service-prod
+      - payment-service-prod
+      - product-service-prod
+      - recommendation-service-prod
+      - review-service-prod
+
+jobs:
+  merge-to-main:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.ref }}
+          fetch-depth: 0
+          token: ${{ secrets.GH_TOKEN }}
+
+      - name: Set up Git
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+
+      - name: Merge to main
+        id: merge
+        run: |
+          git fetch origin main
+          git checkout main
+          git merge --no-ff --allow-unrelated-histories ${{ github.event.ref }} || echo "Merge conflict detected" > conflict.txt
+
+      - name: Check for conflicts
+        if: failure()
+        run: |
+          cat conflict.txt
+          exit 1
+
+      - name: Push changes to main
+        if: success()
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: |
+          git push https://github.com/Md-Rubel-Ahmed-Rana/Fancy-Shop-Monorepo.git main
