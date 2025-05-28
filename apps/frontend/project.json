@@ -4,6 +4,12 @@
   "sourceRoot": "apps/frontend",
   "projectType": "application",
   "tags": [],
-  "// targets": "to see all targets run: nx show project frontend --web",
-  "targets": {}
+  "targets": {
+    "options": {
+      "postcssConfig": "apps/web/postcss.config.js"
+    }
+  },
+  "options": {
+    "postcssConfig": "apps/web/postcss.config.js"
+  }
 }

@@ -4,6 +4,7 @@
 dist
 tmp
 out-tsc
+/tmp-shadcn-ui/
 
 # dependencies
 node_modules
