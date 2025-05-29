@@ -76,6 +76,13 @@ export class UserService {
       where: { id },
       data: { ...updateUserDto },
     });
+
+    return {
+      statusCode: HttpStatus.OK,
+      success: true,
+      message: 'User updated successfully!',
+      data: null,
+    };
   }
 
   async updatePassword(id: string, newPassword: string) {
@@ -84,10 +91,23 @@ export class UserService {
       where: { id },
       data: { password: hashedPassword },
     });
+
+    return {
+      statusCode: HttpStatus.OK,
+      success: true,
+      message: 'User password updated successfully!',
+      data: null,
+    };
   }
 
   async deleteUser(id: string) {
     await this.prisma.user.delete({ where: { id } });
+    return {
+      statusCode: HttpStatus.OK,
+      success: true,
+      message: 'User deleted successfully!',
+      data: null,
+    };
   }
 
   mapUserToDto(user: any): GetUserDto {
@@ -104,11 +124,7 @@ export class UserService {
         id: user.role.id,
         name: user.role.name,
         description: user.role.description,
-        permissions: user.role.permissions.map((rp: any) => ({
-          id: rp.permission.id,
-          name: rp.permission.name,
-          description: rp.permission.description,
-        })),
+        permissions: user.role.permissions,
       },
     };
   }
