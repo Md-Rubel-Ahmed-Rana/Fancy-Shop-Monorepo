@@ -24,14 +24,14 @@ export class UserController {
     return this.userService.createUser(body);
   }
 
-  @Get('id/:id')
-  getUserById(@Param('id') id: string) {
-    return this.userService.getUserById(id);
-  }
-
   @Get('email/:email')
   getUserByEmail(@Param('email') email: string) {
     return this.userService.getUserByEmail(email);
+  }
+
+  @Get(':id')
+  getUserById(@Param('id') id: string) {
+    return this.userService.getUserById(id);
   }
 
   @Patch(':id')
