@@ -13,15 +13,7 @@ export class UserService {
   async findAll() {
     const users = await this.prisma.user.findMany({
       include: {
-        role: {
-          include: {
-            permissions: {
-              include: {
-                permission: true,
-              },
-            },
-          },
-        },
+        role: true,
       },
     });
     const userDtos = users.map((user) => this.mapUserToDto(user));
@@ -34,27 +26,26 @@ export class UserService {
     };
   }
 
-  async createUser(createUserDto: CreateUserDto): Promise<void> {
+  async createUser(createUserDto: CreateUserDto) {
     const hashedPassword = await bcrypt.hash(createUserDto.password, 12);
     createUserDto.password = hashedPassword;
     await this.prisma.user.create({
       data: createUserDto,
     });
+
+    return {
+      statusCode: HttpStatus.CREATED,
+      success: true,
+      message: 'User registered successfully!',
+      data: null,
+    };
   }
 
   async getUserById(id: string) {
     const user = await this.prisma.user.findUnique({
       where: { id },
       include: {
-        role: {
-          include: {
-            permissions: {
-              include: {
-                permission: true,
-              },
-            },
-          },
-        },
+        role: true,
       },
     });
 
