@@ -4,7 +4,6 @@
 dist
 tmp
 out-tsc
-tmp-shadcn-ui
 /tmp-shadcn-ui/
 
 # dependencies
