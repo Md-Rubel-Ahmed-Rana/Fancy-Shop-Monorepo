@@ -13,4 +13,5 @@ A visual overview of the architecture including frontend, backend services, data
 A relational view of the database schema used in the Fancy Shop platform, detailing tables, attributes, and their relationships.
 
 🔗 [View ERD Diagram on DB Docs](https://dbdocs.io/mohinuddinrubel9660/Fancy-shop-ERD-Diagram?view=relationships)
-Password: VqYJJCj7dU@he3z
+
+ ##### Password: VqYJJCj7dU@he3z
