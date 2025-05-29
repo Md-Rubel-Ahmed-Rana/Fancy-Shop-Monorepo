@@ -9,6 +9,7 @@ import {
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto, UpdateUserDto } from '@fancy-shop/shared-dtos';
+import { GrpcMethod } from '@nestjs/microservices';
 
 @Controller('user')
 export class UserController {
@@ -24,9 +25,9 @@ export class UserController {
     return this.userService.createUser(body);
   }
 
-  @Get('email/:email')
-  getUserByEmail(@Param('email') email: string) {
-    return this.userService.getUserByEmail(email);
+  @GrpcMethod('UserService', 'GetUserByEmail')
+  getUserByEmail(data: { email: string }) {
+    return this.userService.getUserByEmail(data.email);
   }
 
   @Get(':id')

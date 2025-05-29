@@ -3,6 +3,7 @@ import { NestFactory } from '@nestjs/core';
 import { Transport } from '@nestjs/microservices';
 import { AppModule } from './app/app.module';
 import morgan from 'morgan';
+import { join } from 'path';
 
 async function bootstrap() {
   const port = process.env.PORT || 9001;
@@ -19,6 +20,15 @@ async function bootstrap() {
     },
   });
 
+  app.connectMicroservice({
+    transport: Transport.GRPC,
+    options: {
+      url: `localhost:${port}`,
+      package: 'user',
+      protoPath: join(process.cwd(), 'proto/user.proto'),
+    },
+  });
+
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,
@@ -26,9 +36,9 @@ async function bootstrap() {
       forbidNonWhitelisted: true,
     })
   );
-
   app.use(morgan('dev'));
 
+  await app.startAllMicroservices();
   app.listen(port, () => {
     Logger.log(`🚀 User Application is running on: http://localhost:${port}`);
   });

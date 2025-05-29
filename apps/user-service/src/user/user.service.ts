@@ -10,6 +10,15 @@ import * as bcrypt from 'bcrypt';
 @Injectable()
 export class UserService {
   constructor(private readonly prisma: PrismaService) {}
+
+  async getUserByEmail(email: string) {
+    console.log();
+    const user = await this.prisma.user.findUnique({
+      where: { email },
+    });
+    return user;
+  }
+
   async findAll() {
     const users = await this.prisma.user.findMany({
       include: {
@@ -56,18 +65,6 @@ export class UserService {
       success: true,
       message: 'User retrieved successfully!',
       data: userDto,
-    };
-  }
-
-  async getUserByEmail(email: string) {
-    const user = await this.prisma.user.findUnique({
-      where: { email },
-    });
-    return {
-      statusCode: HttpStatus.OK,
-      success: true,
-      message: 'User retrieved successfully!',
-      data: user,
     };
   }
 
