@@ -1,4 +1,4 @@
-import { Logger } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { Transport } from '@nestjs/microservices';
 import { AppModule } from './app/app.module';
@@ -17,6 +17,14 @@ async function bootstrap() {
       },
     },
   });
+
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+      whitelist: true,
+      forbidNonWhitelisted: true,
+    })
+  );
 
   app.listen(port, () => {
     Logger.log(`🚀 User Application is running on: http://localhost:${port}`);

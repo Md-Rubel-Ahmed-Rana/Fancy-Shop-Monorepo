@@ -1,6 +1,5 @@
 generator client {
   provider = "prisma-client-js"
-  output   = "../generated/prisma"
 }
 
 datasource db {
@@ -15,7 +14,7 @@ model User {
   last_name  String
   role_id    String
   role       Role      @relation(fields: [role_id], references: [id])
-  email      String
+  email      String    @unique
   password   String
   last_login DateTime?
   created_at DateTime  @default(now())

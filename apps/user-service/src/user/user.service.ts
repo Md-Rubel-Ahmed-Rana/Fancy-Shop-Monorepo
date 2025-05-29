@@ -1,0 +1,124 @@
+import {
+  CreateUserDto,
+  GetUserDto,
+  UpdateUserDto,
+} from '@fancy-shop/shared-dtos';
+import { HttpStatus, Injectable } from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
+import * as bcrypt from 'bcrypt';
+
+@Injectable()
+export class UserService {
+  constructor(private readonly prisma: PrismaService) {}
+  async findAll() {
+    const users = await this.prisma.user.findMany({
+      include: {
+        role: {
+          include: {
+            permissions: {
+              include: {
+                permission: true,
+              },
+            },
+          },
+        },
+      },
+    });
+    const userDtos = users.map((user) => this.mapUserToDto(user));
+
+    return {
+      statusCode: HttpStatus.OK,
+      success: true,
+      message: 'User retrieved successfully!',
+      data: userDtos,
+    };
+  }
+
+  async createUser(createUserDto: CreateUserDto): Promise<void> {
+    const hashedPassword = await bcrypt.hash(createUserDto.password, 12);
+    createUserDto.password = hashedPassword;
+    await this.prisma.user.create({
+      data: createUserDto,
+    });
+  }
+
+  async getUserById(id: string) {
+    const user = await this.prisma.user.findUnique({
+      where: { id },
+      include: {
+        role: {
+          include: {
+            permissions: {
+              include: {
+                permission: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    const userDto = this.mapUserToDto(user);
+
+    return {
+      statusCode: HttpStatus.OK,
+      success: true,
+      message: 'User retrieved successfully!',
+      data: userDto,
+    };
+  }
+
+  async getUserByEmail(email: string) {
+    const user = await this.prisma.user.findUnique({
+      where: { email },
+    });
+    return {
+      statusCode: HttpStatus.OK,
+      success: true,
+      message: 'User retrieved successfully!',
+      data: user,
+    };
+  }
+
+  async updateUser(id: string, updateUserDto: UpdateUserDto) {
+    await this.prisma.user.update({
+      where: { id },
+      data: { ...updateUserDto },
+    });
+  }
+
+  async updatePassword(id: string, newPassword: string) {
+    const hashedPassword = await bcrypt.hash(newPassword, 12);
+    await this.prisma.user.update({
+      where: { id },
+      data: { password: hashedPassword },
+    });
+  }
+
+  async deleteUser(id: string) {
+    await this.prisma.user.delete({ where: { id } });
+  }
+
+  mapUserToDto(user: any): GetUserDto {
+    return {
+      id: user.id,
+      name: user.name,
+      first_name: user.first_name,
+      last_name: user.last_name,
+      email: user.email,
+      last_login: user.last_login ?? undefined,
+      created_at: user.created_at,
+      updated_at: user.updated_at,
+      role: {
+        id: user.role.id,
+        name: user.role.name,
+        description: user.role.description,
+        permissions: user.role.permissions.map((rp: any) => ({
+          id: rp.permission.id,
+          name: rp.permission.name,
+          description: rp.permission.description,
+        })),
+      },
+    };
+  }
+}
