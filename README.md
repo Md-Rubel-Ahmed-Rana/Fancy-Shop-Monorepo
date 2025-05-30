@@ -1,6 +1,6 @@
 # Fancy Shop - E-commerce Platform
 
-Welcome to the official repository of **Fancy Shop**, a modern and scalable e-commerce platform designed with best practices in system design and database architecture.
+Welcome to the official repository of **Fancy Shop**, a modern and scalable e-commerce platform designed with best practices in system design and database architecture. NX Monorepo and NestJS Microservice
 
 ## 🧠 System Design
 
