@@ -3,9 +3,13 @@ import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { join } from 'path';
+import { ConfigModule } from '@nestjs/config';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
+    ConfigModule,
+    JwtModule.register({}),
     ClientsModule.register([
       {
         name: 'USER_SERVICE',
