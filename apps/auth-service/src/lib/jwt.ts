@@ -10,7 +10,7 @@ export class JWT {
   ) {}
 
   private signToken = async (
-    payload: { id: string | string; email: string },
+    payload: { id: string; email: string },
     secret: string,
     expiresIn: number | string
   ): Promise<string> => {
