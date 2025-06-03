@@ -4,20 +4,14 @@ import {
   HttpException,
   HttpStatus,
   OnModuleInit,
-  Logger,
 } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
 import { BcryptInstance } from '../lib/bcrypt';
-import { lastValueFrom, Observable } from 'rxjs';
+import { lastValueFrom } from 'rxjs';
 import { JWT } from '../lib/jwt';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-
-interface UserServiceClient {
-  GetUserByEmail(data: {
-    email: string;
-  }): Observable<{ id: string; email: string; password: string }>;
-}
+import { UserServiceClient } from './interfaces';
 
 @Injectable()
 export class AuthService implements OnModuleInit {
@@ -40,32 +34,20 @@ export class AuthService implements OnModuleInit {
     email: string,
     password: string
   ): Promise<{ accessToken: string; refreshToken: string }> {
-    Logger.log('User is being logged in');
     let user;
 
     try {
       user = await lastValueFrom(this.userService.GetUserByEmail({ email }));
-      console.log('Getting user from user microservice');
-    } catch (error) {
-      Logger.log({
-        from: 'Auth service login method to get user by grpc',
-        error,
-      });
+    } catch {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
 
-    console.log('Matching user password');
-
     const isMatch = await BcryptInstance.compare(password, user.password);
-
     if (!isMatch) {
       throw new HttpException('Invalid credentials', HttpStatus.BAD_REQUEST);
     }
 
-    console.log('Password matched');
-
     // generate tokens
-    console.log('Generating tokens');
     const accessToken = await this.jwt.generateAccessToken({
       id: user.id,
       email: user.email,
@@ -76,5 +58,58 @@ export class AuthService implements OnModuleInit {
     });
 
     return { accessToken, refreshToken };
+  }
+
+  async generatePasswordResetLink(email: string) {
+    let user;
+
+    try {
+      user = await lastValueFrom(this.userService.GetUserByEmail({ email }));
+    } catch {
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+    }
+
+    if (!user) {
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+    }
+
+    // generate tokens
+    const token = await this.jwt.generatePasswordResetToken(
+      user.id,
+      user.email
+    );
+
+    const url = `${this.config.get<string>(
+      'FRONTEND_DOMAIN'
+    )}/reset-password?token=${encodeURIComponent(token)}`;
+
+    // call mail microservice
+
+    return {
+      statusCode: HttpStatus.OK,
+      success: true,
+      message: 'Password reset link sent to email successfully!',
+      data: { url },
+    };
+  }
+
+  async getCurrentUser(id: string) {
+    const user = await lastValueFrom(this.userService.GetUserById({ id }));
+
+    if (!user) {
+      return {
+        statusCode: HttpStatus.NOT_FOUND,
+        success: false,
+        message: 'User was not found',
+        data: null,
+      };
+    }
+
+    return {
+      statusCode: HttpStatus.OK,
+      success: true,
+      message: 'Current logged in user retrieved successfully!',
+      data: user,
+    };
   }
 }

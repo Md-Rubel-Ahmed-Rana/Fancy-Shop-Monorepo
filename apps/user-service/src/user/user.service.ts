@@ -68,6 +68,19 @@ export class UserService {
     };
   }
 
+  async getRPCUserById(id: string) {
+    const user = await this.prisma.user.findUnique({
+      where: { id },
+      include: {
+        role: true,
+      },
+    });
+
+    const userDto = this.mapUserToDto(user);
+    console.log({ userDto });
+    return userDto;
+  }
+
   async updateUser(id: string, updateUserDto: UpdateUserDto) {
     await this.prisma.user.update({
       where: { id },

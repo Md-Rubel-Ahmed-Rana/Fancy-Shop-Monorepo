@@ -30,6 +30,12 @@ export class UserController {
     return this.userService.getUserByEmail(data.email);
   }
 
+  @GrpcMethod('UserService', 'GetUserById')
+  getRPCUserById(data: { id: string }) {
+    console.log('Got user id to fetch for GRPC id:', data.id);
+    return this.userService.getRPCUserById(data.id);
+  }
+
   @Get(':id')
   getUserById(@Param('id') id: string) {
     return this.userService.getUserById(id);
