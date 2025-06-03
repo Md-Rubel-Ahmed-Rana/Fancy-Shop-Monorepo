@@ -57,6 +57,8 @@ export class AuthService implements OnModuleInit {
       email: user.email,
     });
 
+    // fire an event to user microservice to update last login time
+
     return { accessToken, refreshToken };
   }
 

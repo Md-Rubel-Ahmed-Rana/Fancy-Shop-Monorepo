@@ -17,6 +17,7 @@
     "dev:inventory": "npx nx serve inventory-service",
     "dev:recommendation": "npx nx serve recommendation-service",
     "dev:review": "npx nx serve review-service",
+    "dev:mail": "npx nx serve mail-service",
     "docker:build:user": "docker build -t user-service -f apps/user-service/Dockerfile .",
     "docker:start:user": "docker run -d --name user-service-container -p 9001:9001 --env-file apps/user-service/.env user-service",
     "docker:stop:user": "docker stop user-service-container && docker rm user-service-container",
