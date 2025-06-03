@@ -23,7 +23,7 @@ async function bootstrap() {
   app.connectMicroservice({
     transport: Transport.GRPC,
     options: {
-      url: `localhost:${port}`,
+      url: `localhost:${process.env.GRPC_PORT}`,
       package: 'user',
       protoPath: join(process.cwd(), 'proto/user.proto'),
     },
@@ -39,9 +39,11 @@ async function bootstrap() {
   app.use(morgan('dev'));
 
   await app.startAllMicroservices();
-  app.listen(port, () => {
-    Logger.log(`🚀 User Application is running on: http://localhost:${port}`);
-  });
+  await app.listen(port);
+
+  Logger.log(`🚀 User Application is running on: http://localhost:${port}`);
 }
 
-bootstrap();
+bootstrap().catch((err) => {
+  Logger.error('❌ Failed to start application', err);
+});
