@@ -33,7 +33,7 @@ export class AuthGuard implements CanActivate {
     }
 
     try {
-      const payload = await this.jwtService.verifyAsync(accessToken, {
+      const payload = await this.jwtService.verify(accessToken, {
         secret: this.config.get<string>('JWT_SECRET'),
       });
 
@@ -67,17 +67,19 @@ export class AuthGuard implements CanActivate {
           );
         }
       }
-
-      cookieManager.clearTokens(response);
+      console.log({ error });
+      // cookieManager.clearTokens(response);
       throw new UnauthorizedException('Invalid token.');
     }
   }
 
   private extractAccessTokenFromCookie(request: Request): string | undefined {
-    return request.cookies?.fancyShopAccessToken;
+    console.log({ AccessToken: request.cookies?.fancyShopAccessToken });
+    return request.cookies?.fancyShopAccessToken.split(' ')[1];
   }
 
   private extractRefreshTokenFromCookie(request: Request): string | undefined {
-    return request.cookies?.fancyShopRefreshToken;
+    console.log({ RefreshToken: request.cookies?.fancyShopRefreshToken });
+    return request.cookies?.fancyShopRefreshToken.split(' ')[1];
   }
 }

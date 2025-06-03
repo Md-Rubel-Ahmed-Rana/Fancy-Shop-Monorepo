@@ -8,16 +8,11 @@ import {
 } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
 import { BcryptInstance } from '../lib/bcrypt';
-import { lastValueFrom, Observable } from 'rxjs';
+import { lastValueFrom } from 'rxjs';
 import { JWT } from '../lib/jwt';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-
-interface UserServiceClient {
-  GetUserByEmail(data: {
-    email: string;
-  }): Observable<{ id: string; email: string; password: string }>;
-}
+import { UserServiceClient } from './interfaces';
 
 @Injectable()
 export class AuthService implements OnModuleInit {
@@ -76,5 +71,27 @@ export class AuthService implements OnModuleInit {
     });
 
     return { accessToken, refreshToken };
+  }
+
+  async getCurrentUser(id: string) {
+    const user = await lastValueFrom(this.userService.GetUserById({ id }));
+
+    console.log('User from getCurrentUser', user);
+
+    if (!user) {
+      return {
+        statusCode: HttpStatus.NOT_FOUND,
+        success: false,
+        message: 'User was not found',
+        data: null,
+      };
+    }
+
+    return {
+      statusCode: HttpStatus.OK,
+      success: true,
+      message: 'Current logged in user retrieved successfully!',
+      data: user,
+    };
   }
 }

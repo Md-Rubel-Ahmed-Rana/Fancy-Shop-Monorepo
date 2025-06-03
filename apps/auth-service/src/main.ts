@@ -3,6 +3,7 @@ import { NestFactory } from '@nestjs/core';
 import { Transport } from '@nestjs/microservices';
 import { AppModule } from './app/app.module';
 import morgan from 'morgan';
+import cookieParser from 'cookie-parser';
 
 async function bootstrap() {
   const port = process.env.PORT || 9010;
@@ -22,6 +23,7 @@ async function bootstrap() {
   await app.startAllMicroservices();
 
   app.use(morgan('dev'));
+  app.use(cookieParser());
 
   app.listen(port, () => {
     Logger.log(`🚀 Auth Application is running on: http://localhost:${port}`);
