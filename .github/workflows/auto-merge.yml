@@ -14,6 +14,7 @@ on:
       - product-service-prod
       - recommendation-service-prod
       - review-service-prod
+      - mail-service-prod
 
 jobs:
   merge-to-main:

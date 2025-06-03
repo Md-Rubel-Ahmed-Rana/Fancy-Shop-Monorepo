@@ -11,12 +11,14 @@ async function bootstrap() {
     transport: Transport.RMQ,
     options: {
       urls: [process.env.RMQ_URL || 'amqp://localhost:5672'],
-      queue: process.env.RMQ_QUEUE || 'mail',
+      queue: process.env.RMQ_QUEUE || 'mail_queue',
       queueOptions: {
         durable: false,
       },
     },
   });
+
+  await app.startAllMicroservices();
 
   app.listen(port, () => {
     Logger.log(`🚀 Mail Application is running on: http://localhost:${port}`);
