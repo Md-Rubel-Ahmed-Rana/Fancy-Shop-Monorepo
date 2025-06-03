@@ -22,6 +22,11 @@ export class AuthController {
     return this.authService.getCurrentUser(req?.user?.id);
   }
 
+  @Post('forget-password')
+  generatePasswordResetLink(@Body() body: { email: string }) {
+    return this.authService.generatePasswordResetLink(body.email);
+  }
+
   @Post('login')
   async login(@Body() body: { email: string; password: string }, @Res() res) {
     console.log('I am from auth controller');
