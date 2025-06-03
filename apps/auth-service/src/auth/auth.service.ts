@@ -4,8 +4,9 @@ import {
   HttpException,
   HttpStatus,
   OnModuleInit,
+  Logger,
 } from '@nestjs/common';
-import { ClientGrpc } from '@nestjs/microservices';
+import { ClientGrpc, ClientProxy } from '@nestjs/microservices';
 import { BcryptInstance } from '../lib/bcrypt';
 import { lastValueFrom } from 'rxjs';
 import { JWT } from '../lib/jwt';
@@ -20,8 +21,10 @@ export class AuthService implements OnModuleInit {
 
   constructor(
     @Inject('USER_SERVICE') private readonly client: ClientGrpc,
+    @Inject('MAIL_SERVICE') private rmqClient: ClientProxy,
     private jwtService: JwtService,
-    private readonly config: ConfigService
+    private readonly config: ConfigService,
+    private readonly logger: Logger
   ) {
     this.jwt = new JWT(config, jwtService);
   }
@@ -86,12 +89,22 @@ export class AuthService implements OnModuleInit {
     )}/reset-password?token=${encodeURIComponent(token)}`;
 
     // call mail microservice
+    this.rmqClient.emit('send_forgot_password_mail', {
+      name: user.name,
+      email: user.email,
+      resetLink: url,
+    });
+
+    this.logger.log(
+      `📧 Forgot password email event emitted to MAIL_SERVICE for user: ${user.email}`
+    );
 
     return {
       statusCode: HttpStatus.OK,
       success: true,
-      message: 'Password reset link sent to email successfully!',
-      data: { url },
+      message:
+        'Password reset link has been sent to your email. Please check and reset your password.',
+      data: null,
     };
   }
 
