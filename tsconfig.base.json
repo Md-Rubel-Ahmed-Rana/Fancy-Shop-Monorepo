@@ -18,7 +18,7 @@
       "@fancy-shop/shared-dtos": ["libs/shared-dtos/src/index.ts"],
       "@fancy-shop/shared-utils": ["libs/shared-utils/src/index.ts"],
       "@fancy-shop/ui-components": ["libs/ui-components/src/index.ts"],
-        "@fancy-shop/ui-components/*": ["libs/ui-components/src/*"]
+      "@fancy-shop/ui-components/*": ["libs/ui-components/src/*"]
     }
   },
   "exclude": ["node_modules", "tmp"]
