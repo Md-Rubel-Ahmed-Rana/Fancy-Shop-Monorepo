@@ -51,7 +51,8 @@
         "apps/review-service-e2e/**/*",
         "apps/auth-service-e2e/**/*",
         "apps/api-gateway-e2e/**/*",
-        "apps/customer-service-e2e/**/*"
+        "apps/customer-service-e2e/**/*",
+        "apps/mail-service-e2e/**/*"
       ]
     },
     {
