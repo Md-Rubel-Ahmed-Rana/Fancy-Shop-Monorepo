@@ -25,4 +25,6 @@ async function bootstrap() {
   });
 }
 
-bootstrap();
+bootstrap().catch((error) => {
+  Logger.error('❌ Failed to start mail application', error);
+});
