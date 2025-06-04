@@ -1,18 +1,8 @@
-export class GetPermissionDto {
-  id!: string;
-  name!: string;
-  description!: string;
-}
-
 export class GetRoleDto {
   id!: string;
   name!: string;
   description!: string;
-<<<<<<< HEAD
-=======
-
->>>>>>> ce28c9f (User CRUD operation completed)
-  permissions?: GetPermissionDto[];
+  permissions?: string[];
 }
 
 export class GetUserDto {
