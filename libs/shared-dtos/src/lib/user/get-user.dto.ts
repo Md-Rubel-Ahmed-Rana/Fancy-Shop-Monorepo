@@ -8,6 +8,10 @@ export class GetRoleDto {
   id!: string;
   name!: string;
   description!: string;
+<<<<<<< HEAD
+=======
+
+>>>>>>> ce28c9f (User CRUD operation completed)
   permissions?: GetPermissionDto[];
 }
 
