@@ -13,8 +13,8 @@ model User {
   first_name String
   last_name  String
   role_id    String
-  role       Role      @relation(fields: [role_id], references: [id], onDelete: Cascade)
-  email      String    @unique
+  role       Role      @relation(fields: [role_id], references: [id])
+  email      String
   password   String
   last_login DateTime?
   created_at DateTime  @default(now())
