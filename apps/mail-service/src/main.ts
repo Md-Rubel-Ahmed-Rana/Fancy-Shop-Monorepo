@@ -9,9 +9,10 @@ async function bootstrap() {
 
   app.connectMicroservice({
     transport: Transport.RMQ,
+    name: 'MAIL_SERVICE',
     options: {
       urls: [process.env.RMQ_URL || 'amqp://localhost:5672'],
-      queue: process.env.RMQ_QUEUE || 'mail_queue',
+      queue: process.env.MAIL_RMQ_QUEUE || 'mail_queue',
       queueOptions: {
         durable: false,
       },
@@ -20,9 +21,9 @@ async function bootstrap() {
 
   await app.startAllMicroservices();
 
-  app.listen(port, () => {
-    Logger.log(`🚀 Mail Application is running on: http://localhost:${port}`);
-  });
+  await app.listen(port);
+
+  Logger.log(`🚀 Mail Application is running on: http://localhost:${port}`);
 }
 
 bootstrap().catch((error) => {

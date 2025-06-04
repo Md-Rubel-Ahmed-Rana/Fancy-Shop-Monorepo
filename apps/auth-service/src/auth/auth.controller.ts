@@ -22,6 +22,9 @@ export class AuthController {
     return this.authService.getCurrentUser(req?.user?.id);
   }
 
+  @Get('verify-reset-password-token')
+  verifyResetPasswordToken() {}
+
   @Post('forget-password')
   generatePasswordResetLink(@Body() body: { email: string }) {
     return this.authService.generatePasswordResetLink(body.email);

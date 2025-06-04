@@ -19,8 +19,11 @@ WORKDIR /app
 # Copy auth-service build output
 COPY --from=builder /app/dist/apps/auth-service ./dist
 
-# Copy shared lib source (optional but works with tsconfig paths)
+# Copy shared lib source
 COPY --from=builder /app/libs ./libs
+
+# Copy proto files
+COPY --from=builder /app/proto ./proto
 
 COPY --from=builder /app/package.json ./package.json
 
