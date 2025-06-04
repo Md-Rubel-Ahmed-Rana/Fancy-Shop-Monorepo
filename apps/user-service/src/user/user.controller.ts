@@ -9,10 +9,7 @@ import {
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto, UpdateUserDto } from '@fancy-shop/shared-dtos';
-<<<<<<< HEAD
 import { GrpcMethod } from '@nestjs/microservices';
-=======
->>>>>>> ce28c9f (User CRUD operation completed)
 
 @Controller('user')
 export class UserController {
@@ -28,7 +25,6 @@ export class UserController {
     return this.userService.createUser(body);
   }
 
-<<<<<<< HEAD
   @GrpcMethod('UserService', 'GetUserByEmail')
   getUserByEmail(data: { email: string }) {
     return this.userService.getUserByEmail(data.email);
@@ -41,21 +37,10 @@ export class UserController {
   }
 
   @Get(':id')
-=======
-  @Get('id/:id')
->>>>>>> ce28c9f (User CRUD operation completed)
   getUserById(@Param('id') id: string) {
     return this.userService.getUserById(id);
   }
 
-<<<<<<< HEAD
-=======
-  @Get('email/:email')
-  getUserByEmail(@Param('email') email: string) {
-    return this.userService.getUserByEmail(email);
-  }
-
->>>>>>> ce28c9f (User CRUD operation completed)
   @Patch(':id')
   updateUser(@Param('id') id: string, @Body() body: UpdateUserDto) {
     return this.userService.updateUser(id, body);
