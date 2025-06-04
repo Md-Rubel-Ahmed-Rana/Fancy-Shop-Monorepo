@@ -10,7 +10,6 @@ import * as bcrypt from 'bcrypt';
 @Injectable()
 export class UserService {
   constructor(private readonly prisma: PrismaService) {}
-<<<<<<< HEAD
 
   async getUserByEmail(email: string) {
     console.log();
@@ -24,20 +23,6 @@ export class UserService {
     const users = await this.prisma.user.findMany({
       include: {
         role: true,
-=======
-  async findAll() {
-    const users = await this.prisma.user.findMany({
-      include: {
-        role: {
-          include: {
-            permissions: {
-              include: {
-                permission: true,
-              },
-            },
-          },
-        },
->>>>>>> ce28c9f (User CRUD operation completed)
       },
     });
     const userDtos = users.map((user) => this.mapUserToDto(user));
@@ -50,17 +35,12 @@ export class UserService {
     };
   }
 
-<<<<<<< HEAD
   async createUser(createUserDto: CreateUserDto) {
-=======
-  async createUser(createUserDto: CreateUserDto): Promise<void> {
->>>>>>> ce28c9f (User CRUD operation completed)
     const hashedPassword = await bcrypt.hash(createUserDto.password, 12);
     createUserDto.password = hashedPassword;
     await this.prisma.user.create({
       data: createUserDto,
     });
-<<<<<<< HEAD
 
     return {
       statusCode: HttpStatus.CREATED,
@@ -68,27 +48,13 @@ export class UserService {
       message: 'User registered successfully!',
       data: null,
     };
-=======
->>>>>>> ce28c9f (User CRUD operation completed)
   }
 
   async getUserById(id: string) {
     const user = await this.prisma.user.findUnique({
       where: { id },
       include: {
-<<<<<<< HEAD
         role: true,
-=======
-        role: {
-          include: {
-            permissions: {
-              include: {
-                permission: true,
-              },
-            },
-          },
-        },
->>>>>>> ce28c9f (User CRUD operation completed)
       },
     });
 
@@ -102,7 +68,6 @@ export class UserService {
     };
   }
 
-<<<<<<< HEAD
   async getRPCUserById(id: string) {
     const user = await this.prisma.user.findUnique({
       where: { id },
@@ -114,18 +79,6 @@ export class UserService {
     const userDto = this.mapUserToDto(user);
     console.log({ userDto });
     return userDto;
-=======
-  async getUserByEmail(email: string) {
-    const user = await this.prisma.user.findUnique({
-      where: { email },
-    });
-    return {
-      statusCode: HttpStatus.OK,
-      success: true,
-      message: 'User retrieved successfully!',
-      data: user,
-    };
->>>>>>> ce28c9f (User CRUD operation completed)
   }
 
   async updateUser(id: string, updateUserDto: UpdateUserDto) {
@@ -133,7 +86,6 @@ export class UserService {
       where: { id },
       data: { ...updateUserDto },
     });
-<<<<<<< HEAD
 
     return {
       statusCode: HttpStatus.OK,
@@ -141,8 +93,6 @@ export class UserService {
       message: 'User updated successfully!',
       data: null,
     };
-=======
->>>>>>> ce28c9f (User CRUD operation completed)
   }
 
   async updatePassword(id: string, newPassword: string) {
@@ -151,7 +101,6 @@ export class UserService {
       where: { id },
       data: { password: hashedPassword },
     });
-<<<<<<< HEAD
 
     return {
       statusCode: HttpStatus.OK,
@@ -159,21 +108,16 @@ export class UserService {
       message: 'User password updated successfully!',
       data: null,
     };
-=======
->>>>>>> ce28c9f (User CRUD operation completed)
   }
 
   async deleteUser(id: string) {
     await this.prisma.user.delete({ where: { id } });
-<<<<<<< HEAD
     return {
       statusCode: HttpStatus.OK,
       success: true,
       message: 'User deleted successfully!',
       data: null,
     };
-=======
->>>>>>> ce28c9f (User CRUD operation completed)
   }
 
   mapUserToDto(user: any): GetUserDto {
@@ -190,15 +134,7 @@ export class UserService {
         id: user.role.id,
         name: user.role.name,
         description: user.role.description,
-<<<<<<< HEAD
         permissions: user.role.permissions,
-=======
-        permissions: user.role.permissions.map((rp: any) => ({
-          id: rp.permission.id,
-          name: rp.permission.name,
-          description: rp.permission.description,
-        })),
->>>>>>> ce28c9f (User CRUD operation completed)
       },
     };
   }
