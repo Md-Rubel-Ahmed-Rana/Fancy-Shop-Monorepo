@@ -19,7 +19,7 @@ import { ConfigService } from '@nestjs/config';
         },
       },
       defaults: {
-        from: '"Fancy Shop" <no-reply@mdrubelahmedrana521@gmail.com.com>',
+        from: '"Fancy Shop" <mdrubelahmedrana521@gmail.com.com>',
       },
       template: {
         dir: path.join(process.cwd(), 'apps/mail-service/src/templates'),

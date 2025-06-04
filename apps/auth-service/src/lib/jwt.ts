@@ -1,7 +1,5 @@
-import { NextFunction, Request, Response } from 'express';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { HttpStatus } from '@nestjs/common';
 
 export class JWT {
   constructor(
@@ -51,43 +49,4 @@ export class JWT {
 
     return token;
   }
-
-  public verifyResetPasswordToken = (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) => {
-    const resetToken = req.query.token as string;
-
-    if (!resetToken) {
-      return res.status(HttpStatus.BAD_REQUEST).json({
-        statusCode: HttpStatus.BAD_REQUEST,
-        success: false,
-        message: 'Reset token is required.',
-      });
-    }
-
-    try {
-      const decoded = this.jwtService.verify(resetToken, {
-        secret: this.config.get<string>('JWT_SECRET'),
-      }) as {
-        id: string;
-        email: string;
-      };
-
-      req['user'] = decoded;
-      next();
-    } catch (err: any) {
-      const message =
-        err.name === 'TokenExpiredError'
-          ? 'The reset link has expired. Please request a new one.'
-          : 'Invalid reset token. Please request a new one.';
-
-      return res.status(HttpStatus.UNAUTHORIZED).json({
-        statusCode: HttpStatus.UNAUTHORIZED,
-        success: false,
-        message,
-      });
-    }
-  };
 }
