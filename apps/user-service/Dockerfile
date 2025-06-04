@@ -39,6 +39,9 @@ COPY --from=builder /app/apps/user-service/prisma ./prisma
 # Copy shared libs if needed
 COPY --from=builder /app/libs ./libs
 
+# Copy proto files
+COPY --from=builder /app/proto ./proto
+
 # Copy package.json and install only production deps
 COPY --from=builder /app/package.json ./package.json
 RUN npm install --omit=dev
