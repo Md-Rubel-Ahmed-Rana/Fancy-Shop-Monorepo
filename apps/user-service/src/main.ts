@@ -13,7 +13,7 @@ async function bootstrap() {
     transport: Transport.RMQ,
     options: {
       urls: [process.env.RMQ_URL || 'amqp://localhost:5672'],
-      queue: process.env.RMQ_QUEUE || 'user',
+      queue: process.env.RMQ_QUEUE || 'user_queue',
       queueOptions: {
         durable: false,
       },
@@ -23,7 +23,7 @@ async function bootstrap() {
   app.connectMicroservice({
     transport: Transport.GRPC,
     options: {
-      url: `localhost:${process.env.GRPC_PORT}`,
+      url: `${process.env.USER_GRPC_URL || 'localhost:50051'}`,
       package: 'user',
       protoPath: join(process.cwd(), 'proto/user.proto'),
     },
@@ -45,5 +45,5 @@ async function bootstrap() {
 }
 
 bootstrap().catch((err) => {
-  Logger.error('❌ Failed to start application', err);
+  Logger.error('❌ Failed to start user application', err);
 });
